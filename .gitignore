@@ -1,0 +1,5 @@
+# Built golang binaries
+bin/
+
+# Local Go code
+/main.go
