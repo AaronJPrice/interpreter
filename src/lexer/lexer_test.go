@@ -33,6 +33,26 @@ func TestNextToken(t *testing.T) {
 		}
 	})
 
+	t.Run("-/*<>", func(t *testing.T) {
+		input := `-/*<>`
+		expectedTokens := []token.Token{
+			{Type: token.MINUS, Literal: "-"},
+			{Type: token.SLASH, Literal: "/"},
+			{Type: token.ASTERISK, Literal: "*"},
+			{Type: token.LT, Literal: "<"},
+			{Type: token.GT, Literal: ">"},
+		}
+
+		l := New(input)
+
+		for _, expect := range expectedTokens {
+			actual := l.NextToken()
+			if !assert.Equal(t, expect, actual) {
+				break
+			}
+		}
+	})
+
 	t.Run("let five = 5;", func(t *testing.T) {
 		input := `let five = 5;`
 
