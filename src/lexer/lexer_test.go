@@ -53,6 +53,27 @@ func TestNextToken(t *testing.T) {
 		}
 	})
 
+	t.Run("true false if else return", func(t *testing.T) {
+		input := `true false if else return`
+
+		expectedTokens := []token.Token{
+			{Type: token.TRUE, Literal: "true"},
+			{Type: token.FALSE, Literal: "false"},
+			{Type: token.IF, Literal: "if"},
+			{Type: token.ELSE, Literal: "else"},
+			{Type: token.RETURN, Literal: "return"},
+		}
+
+		l := New(input)
+
+		for _, expect := range expectedTokens {
+			actual := l.NextToken()
+			if !assert.Equal(t, expect, actual) {
+				break
+			}
+		}
+	})
+
 	t.Run("let five = 5;", func(t *testing.T) {
 		input := `let five = 5;`
 
