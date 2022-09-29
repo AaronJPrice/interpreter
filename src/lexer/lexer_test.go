@@ -36,6 +36,7 @@ func TestNextToken(t *testing.T) {
 			{Type: token.ASTERISK, Literal: "*"},
 			{Type: token.LT, Literal: "<"},
 			{Type: token.GT, Literal: ">"},
+			{Type: token.EOF, Literal: ""},
 		}
 
 		l := New(input)
@@ -52,6 +53,7 @@ func TestNextToken(t *testing.T) {
 			{Type: token.IF, Literal: "if"},
 			{Type: token.ELSE, Literal: "else"},
 			{Type: token.RETURN, Literal: "return"},
+			{Type: token.EOF, Literal: ""},
 		}
 
 		l := New(input)
@@ -68,6 +70,7 @@ func TestNextToken(t *testing.T) {
 			{Type: token.ASSIGN, Literal: "="},
 			{Type: token.INT, Literal: "5"},
 			{Type: token.SEMICOLON, Literal: ";"},
+			{Type: token.EOF, Literal: ""},
 		}
 
 		l := New(input)
@@ -145,6 +148,7 @@ func TestNextToken(t *testing.T) {
 			{Type: token.NOT_EQ, Literal: "!="},
 			{Type: token.INT, Literal: "9"},
 			{Type: token.SEMICOLON, Literal: ";"},
+			{Type: token.EOF, Literal: ""},
 		}
 
 		l := New(input)
