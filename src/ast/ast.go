@@ -6,7 +6,9 @@ import (
 
 type Node interface {
 	TokenLiteral() string
+	String() string
 }
+
 type Statement interface {
 	Node
 	statementNode()
@@ -19,10 +21,13 @@ type Expression interface {
 
 ////////////////////////////////////
 
-type Identifier struct {
+type IdentifierExpression struct {
 	Token token.Token // the token.IDENT token
 	Value string
 }
 
-func (i *Identifier) expressionNode()      {}
-func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
+func (e *IdentifierExpression) expressionNode()      {}
+func (e *IdentifierExpression) TokenLiteral() string { return e.Token.Literal }
+func (e *IdentifierExpression) String() string {
+	return e.Value
+}

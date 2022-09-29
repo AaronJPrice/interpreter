@@ -62,7 +62,7 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 		return nil // could return an error here
 	}
 
-	s.Name = &ast.Identifier{Token: p.crntToken, Value: p.crntToken.Literal}
+	s.Name = &ast.IdentifierExpression{Token: p.crntToken, Value: p.crntToken.Literal}
 
 	if !p.advanceIfNextIs(token.ASSIGN) {
 		return nil // could return an error here

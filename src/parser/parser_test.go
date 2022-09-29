@@ -18,7 +18,7 @@ func TestLetStatements(t *testing.T) {
 			Statements: []ast.Statement{
 				&ast.LetStatement{
 					Token: token.New(token.LET, "let"),
-					Name:  &ast.Identifier{Token: token.New(token.IDENT, "x"), Value: "x"},
+					Name:  &ast.IdentifierExpression{Token: token.New(token.IDENT, "x"), Value: "x"},
 					Value: nil, // TODO
 				},
 			},
@@ -36,7 +36,7 @@ func TestLetStatements(t *testing.T) {
 			Statements: []ast.Statement{
 				&ast.LetStatement{
 					Token: token.New(token.LET, "let"),
-					Name:  &ast.Identifier{Token: token.New(token.IDENT, "y"), Value: "y"},
+					Name:  &ast.IdentifierExpression{Token: token.New(token.IDENT, "y"), Value: "y"},
 					Value: nil, // TODO
 				},
 			},
@@ -54,7 +54,7 @@ func TestLetStatements(t *testing.T) {
 			Statements: []ast.Statement{
 				&ast.LetStatement{
 					Token: token.New(token.LET, "let"),
-					Name:  &ast.Identifier{Token: token.New(token.IDENT, "foobar"), Value: "foobar"},
+					Name:  &ast.IdentifierExpression{Token: token.New(token.IDENT, "foobar"), Value: "foobar"},
 					Value: nil, // TODO
 				},
 			},
