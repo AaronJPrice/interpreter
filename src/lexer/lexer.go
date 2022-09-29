@@ -29,39 +29,39 @@ func (l *Lexer) NextToken() token.Token {
 			l.advance()
 			t = token.Token{Literal: "==", Type: token.EQ}
 		} else {
-			t = token.New(l.character, token.ASSIGN)
+			t = newToken(l.character, token.ASSIGN)
 		}
 	case '+':
-		t = token.New(l.character, token.PLUS)
+		t = newToken(l.character, token.PLUS)
 	case '-':
-		t = token.New(l.character, token.MINUS)
+		t = newToken(l.character, token.MINUS)
 	case '!':
 		if l.peek() == '=' {
 			l.advance()
 			t = token.Token{Literal: "!=", Type: token.NOT_EQ}
 		} else {
-			t = token.New(l.character, token.BANG)
+			t = newToken(l.character, token.BANG)
 		}
 	case '*':
-		t = token.New(l.character, token.ASTERISK)
+		t = newToken(l.character, token.ASTERISK)
 	case '/':
-		t = token.New(l.character, token.SLASH)
+		t = newToken(l.character, token.SLASH)
 	case '<':
-		t = token.New(l.character, token.LT)
+		t = newToken(l.character, token.LT)
 	case '>':
-		t = token.New(l.character, token.GT)
+		t = newToken(l.character, token.GT)
 	case ',':
-		t = token.New(l.character, token.COMMA)
+		t = newToken(l.character, token.COMMA)
 	case ';':
-		t = token.New(l.character, token.SEMICOLON)
+		t = newToken(l.character, token.SEMICOLON)
 	case '(':
-		t = token.New(l.character, token.LPAREN)
+		t = newToken(l.character, token.LPAREN)
 	case ')':
-		t = token.New(l.character, token.RPAREN)
+		t = newToken(l.character, token.RPAREN)
 	case '{':
-		t = token.New(l.character, token.LBRACE)
+		t = newToken(l.character, token.LBRACE)
 	case '}':
-		t = token.New(l.character, token.RBRACE)
+		t = newToken(l.character, token.RBRACE)
 	default:
 		if isLetter(l.character) {
 			word := l.readWord()
@@ -72,13 +72,17 @@ func (l *Lexer) NextToken() token.Token {
 			t = token.Token{Literal: number, Type: token.INT}
 			return t
 		} else {
-			t = token.New(l.character, token.ILLEGAL)
+			t = newToken(l.character, token.ILLEGAL)
 		}
 	}
 
 	l.advance()
 
 	return t
+}
+
+func newToken(literal byte, tokenType token.TokenType) token.Token {
+	return token.Token{Type: tokenType, Literal: string(literal)}
 }
 
 func (l *Lexer) skipWhitespace() {

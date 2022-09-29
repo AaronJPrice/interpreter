@@ -1,7 +1,7 @@
 package token
 
-func New(literal byte, tokenType TokenType) Token {
-	return Token{Type: tokenType, Literal: string(literal)}
+func New(tokenType TokenType, literal string) Token {
+	return Token{Type: tokenType, Literal: literal}
 }
 
 type Token struct {
