@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"errors"
 	"testing"
 
 	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/ast"
@@ -66,6 +67,19 @@ func TestParser(t *testing.T) {
 			doTest(t, p, expect)
 		})
 
+		t.Run("let x 5;", func(t *testing.T) {
+			input := `let x 5;`
+
+			expect := []error{
+				errors.New("expected next token to be =, got INT"),
+			}
+
+			p := New(lexer.New(input))
+			p.ParseProgram()
+			actual := p.Errors()
+
+			assert.Equal(t, expect, actual)
+		})
 	})
 
 }
