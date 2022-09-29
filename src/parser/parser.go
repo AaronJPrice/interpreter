@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"fmt"
+
 	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/ast"
 	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/lexer"
 	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/token"
@@ -16,8 +18,13 @@ func New(l *lexer.Lexer) *Parser {
 
 type Parser struct {
 	l         *lexer.Lexer
+	errors    []error
 	crntToken token.Token
 	nextToken token.Token
+}
+
+func (p *Parser) Errors() []error {
+	return p.errors
 }
 
 func (p *Parser) ParseProgram() *ast.Program {
@@ -72,6 +79,12 @@ func (p *Parser) advanceIfNextIs(t token.TokenType) bool {
 		p.advance()
 		return true
 	} else {
+		p.addError(t)
 		return false
 	}
+}
+
+func (p *Parser) addError(t token.TokenType) {
+	err := fmt.Errorf("expected next token to be %s, got %s", t, p.nextToken.Type)
+	p.errors = append(p.errors, err)
 }

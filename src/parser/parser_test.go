@@ -25,8 +25,10 @@ func TestParser(t *testing.T) {
 				},
 			}
 
-			actual := New(lexer.New(input)).ParseProgram()
+			p := New(lexer.New(input))
+			actual := p.ParseProgram()
 
+			assert.Nil(t, p.Errors())
 			assert.Equal(t, expect, actual)
 		})
 
@@ -43,8 +45,10 @@ func TestParser(t *testing.T) {
 				},
 			}
 
-			actual := New(lexer.New(input)).ParseProgram()
+			p := New(lexer.New(input))
+			actual := p.ParseProgram()
 
+			assert.Nil(t, p.Errors())
 			assert.Equal(t, expect, actual)
 		})
 
@@ -61,8 +65,10 @@ func TestParser(t *testing.T) {
 				},
 			}
 
-			actual := New(lexer.New(input)).ParseProgram()
+			p := New(lexer.New(input))
+			actual := p.ParseProgram()
 
+			assert.Nil(t, p.Errors())
 			assert.Equal(t, expect, actual)
 		})
 
