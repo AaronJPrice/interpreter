@@ -1,6 +1,6 @@
 package token
 
-func LookupWord(word string) string {
+func LookupWord(word string) TokenType {
 	switch word {
 	case "fn":
 		return FUNCTION
