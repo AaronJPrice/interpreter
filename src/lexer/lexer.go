@@ -2,10 +2,6 @@ package lexer
 
 import "bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/token"
 
-// func Lex(source string) []token.Token {
-// 	panic("not implemented")
-// }
-
 func New(source string) *Lexer {
 	l := &Lexer{source: source}
 	l.advance()
@@ -29,13 +25,23 @@ func (l *Lexer) NextToken() token.Token {
 	case 0:
 		t = token.Token{Literal: "", Type: token.EOF}
 	case '=':
-		t = token.New(l.character, token.ASSIGN)
+		if l.peek() == '=' {
+			l.advance()
+			t = token.Token{Literal: "==", Type: token.EQ}
+		} else {
+			t = token.New(l.character, token.ASSIGN)
+		}
 	case '+':
 		t = token.New(l.character, token.PLUS)
 	case '-':
 		t = token.New(l.character, token.MINUS)
 	case '!':
-		t = token.New(l.character, token.BANG)
+		if l.peek() == '=' {
+			l.advance()
+			t = token.Token{Literal: "!=", Type: token.NOT_EQ}
+		} else {
+			t = token.New(l.character, token.BANG)
+		}
 	case '*':
 		t = token.New(l.character, token.ASTERISK)
 	case '/':
@@ -78,6 +84,14 @@ func (l *Lexer) NextToken() token.Token {
 func (l *Lexer) skipWhitespace() {
 	for l.character == ' ' || l.character == '\t' || l.character == '\n' || l.character == '\r' {
 		l.advance()
+	}
+}
+
+func (l *Lexer) peek() byte {
+	if l.nextPosition >= len(l.source) {
+		return 0
+	} else {
+		return l.source[l.nextPosition]
 	}
 }
 

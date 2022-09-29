@@ -25,12 +25,7 @@ func TestNextToken(t *testing.T) {
 
 		l := New(input)
 
-		for _, expect := range expectedTokens {
-			actual := l.NextToken()
-			if !assert.Equal(t, expect, actual) {
-				break
-			}
-		}
+		doTest(t, l, expectedTokens)
 	})
 
 	t.Run("-/*<>", func(t *testing.T) {
@@ -45,12 +40,7 @@ func TestNextToken(t *testing.T) {
 
 		l := New(input)
 
-		for _, expect := range expectedTokens {
-			actual := l.NextToken()
-			if !assert.Equal(t, expect, actual) {
-				break
-			}
-		}
+		doTest(t, l, expectedTokens)
 	})
 
 	t.Run("true false if else return", func(t *testing.T) {
@@ -66,12 +56,7 @@ func TestNextToken(t *testing.T) {
 
 		l := New(input)
 
-		for _, expect := range expectedTokens {
-			actual := l.NextToken()
-			if !assert.Equal(t, expect, actual) {
-				break
-			}
-		}
+		doTest(t, l, expectedTokens)
 	})
 
 	t.Run("let five = 5;", func(t *testing.T) {
@@ -87,12 +72,7 @@ func TestNextToken(t *testing.T) {
 
 		l := New(input)
 
-		for _, expect := range expectedTokens {
-			actual := l.NextToken()
-			if !assert.Equal(t, expect, actual) {
-				break
-			}
-		}
+		doTest(t, l, expectedTokens)
 	})
 
 	t.Run("lots of source", func(t *testing.T) {
@@ -148,11 +128,36 @@ func TestNextToken(t *testing.T) {
 
 		l := New(input)
 
-		for _, expect := range expectedTokens {
-			actual := l.NextToken()
-			if !assert.Equal(t, expect, actual) {
-				break
-			}
-		}
+		doTest(t, l, expectedTokens)
 	})
+
+	t.Run("more source", func(t *testing.T) {
+		input := `
+		10 == 10;
+		10 != 9;`
+
+		expectedTokens := []token.Token{
+			{Type: token.INT, Literal: "10"},
+			{Type: token.EQ, Literal: "=="},
+			{Type: token.INT, Literal: "10"},
+			{Type: token.SEMICOLON, Literal: ";"},
+			{Type: token.INT, Literal: "10"},
+			{Type: token.NOT_EQ, Literal: "!="},
+			{Type: token.INT, Literal: "9"},
+			{Type: token.SEMICOLON, Literal: ";"},
+		}
+
+		l := New(input)
+
+		doTest(t, l, expectedTokens)
+	})
+}
+
+func doTest(t *testing.T, l *Lexer, expectedTokens []token.Token) {
+	for _, expect := range expectedTokens {
+		actual := l.NextToken()
+		if !assert.Equal(t, expect, actual) {
+			break
+		}
+	}
 }
