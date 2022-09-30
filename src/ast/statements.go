@@ -46,11 +46,11 @@ type BlockStatement struct {
 	Statements []Statement
 }
 
-func (bs *BlockStatement) statementNode()       {}
-func (bs *BlockStatement) TokenLiteral() string { return bs.Token.Literal }
-func (bs *BlockStatement) String() string {
+func (s *BlockStatement) statementNode()       {}
+func (s *BlockStatement) TokenLiteral() string { return s.Token.Literal }
+func (s *BlockStatement) String() string {
 	var out bytes.Buffer
-	for _, s := range bs.Statements {
+	for _, s := range s.Statements {
 		out.WriteString(s.String())
 	}
 	return out.String()
