@@ -15,7 +15,10 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 		return p.parseIdentifier()
 	case token.INT:
 		return p.parseIntegerLiteral()
+	case token.BANG, token.MINUS:
+		return p.parsePrefixExpression()
 	default:
+		p.noPrefixParseFnError(p.crntToken.Type)
 		return nil
 	}
 
@@ -41,4 +44,19 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 		Token: p.crntToken,
 		Value: value,
 	}
+}
+
+func (p *Parser) parsePrefixExpression() ast.Expression {
+	expression := &ast.PrefixExpression{
+		Token:    p.crntToken,
+		Operator: p.crntToken.Type,
+	}
+	p.advance()
+	expression.Right = p.parseExpression(PREFIX)
+	return expression
+}
+
+func (p *Parser) noPrefixParseFnError(t token.TokenType) {
+	msg := fmt.Errorf("no prefix parse function for %s found", t)
+	p.errors = append(p.errors, msg)
 }

@@ -15,6 +15,7 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseExpressionStatement()
 	}
 }
+
 func (p *Parser) parseLetStatement() *ast.LetStatement {
 	s := &ast.LetStatement{Token: p.crntToken}
 
@@ -50,10 +51,11 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 }
 
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
-	s := &ast.ExpressionStatement{
-		Token:      p.crntToken,
-		Expression: p.parseExpression(LOWEST),
-	}
+	s := &ast.ExpressionStatement{Token: p.crntToken}
+	// parseExpression advances crntToken, so it must be called _after_ setting the Token field in
+	// ExpressionStatement (i.e. it can't be called inline as part of the struct literal) since
+	// otherwise the value of Token will be wrong
+	s.Expression = p.parseExpression(LOWEST)
 
 	p.advanceIfNextIs(token.SEMICOLON)
 

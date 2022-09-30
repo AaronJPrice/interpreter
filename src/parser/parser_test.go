@@ -151,6 +151,58 @@ func TestIntegerExpression(t *testing.T) {
 	doTest(t, p, expect)
 }
 
+func TestParsingPrefixExpressions(t *testing.T) {
+	t.Run("!5;", func(t *testing.T) {
+
+		input := `!5;`
+
+		expect := &ast.Program{
+			Statements: []ast.Statement{
+				&ast.ExpressionStatement{
+					Token: token.New(token.BANG, "!"),
+					Expression: &ast.PrefixExpression{
+						Token:    token.New(token.BANG, "!"),
+						Operator: token.BANG,
+						Right: &ast.IntegerLiteral{
+							Token: token.New(token.INT, "5"),
+							Value: 5,
+						},
+					},
+				},
+			},
+		}
+
+		p := New(lexer.New(input))
+
+		doTest(t, p, expect)
+	})
+
+	t.Run("-15;", func(t *testing.T) {
+
+		input := `-15;`
+
+		expect := &ast.Program{
+			Statements: []ast.Statement{
+				&ast.ExpressionStatement{
+					Token: token.New(token.MINUS, "-"),
+					Expression: &ast.PrefixExpression{
+						Token:    token.New(token.MINUS, "-"),
+						Operator: token.MINUS,
+						Right: &ast.IntegerLiteral{
+							Token: token.New(token.INT, "15"),
+							Value: 15,
+						},
+					},
+				},
+			},
+		}
+
+		p := New(lexer.New(input))
+
+		doTest(t, p, expect)
+	})
+}
+
 func doTest(t *testing.T, p *Parser, expect interface{}) {
 	actual := p.ParseProgram()
 
@@ -159,6 +211,8 @@ func doTest(t *testing.T, p *Parser, expect interface{}) {
 			t.Log(err)
 		}
 	} else {
-		assert.Equal(t, expect, actual)
+		if !assert.Equal(t, expect, actual) {
+			t.Log("actual:", actual)
+		}
 	}
 }
