@@ -26,8 +26,6 @@ type Parser struct {
 	errors    []error
 	crntToken token.Token
 	nextToken token.Token
-	// prefixParseFns map[token.TokenType]prefixParseFn
-	// infixParseFns  map[token.TokenType]infixParseFn
 }
 
 func (p *Parser) Errors() []error {
@@ -66,16 +64,3 @@ func (p *Parser) addError(t token.TokenType) {
 	err := fmt.Errorf("expected next token to be %s, got %s", t, p.nextToken.Type)
 	p.errors = append(p.errors, err)
 }
-
-// func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
-// 	p.prefixParseFns[tokenType] = fn
-// }
-
-// func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFn) {
-// 	p.infixParseFns[tokenType] = fn
-// }
-
-// type (
-// 	prefixParseFn func() ast.Expression
-// 	infixParseFn  func(ast.Expression) ast.Expression
-// )

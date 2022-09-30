@@ -10,23 +10,31 @@ import (
 
 func (p *Parser) parseExpression(precedence int) ast.Expression {
 
+	var expression ast.Expression
+
 	switch p.crntToken.Type {
 	case token.IDENT:
-		return p.parseIdentifier()
+		expression = p.parseIdentifier()
 	case token.INT:
-		return p.parseIntegerLiteral()
+		expression = p.parseIntegerLiteral()
 	case token.BANG, token.MINUS:
-		return p.parsePrefixExpression()
+		expression = p.parsePrefixExpression()
 	default:
 		p.noPrefixParseFnError(p.crntToken.Type)
 		return nil
 	}
 
-	// if prefixParseFn, exists := p.prefixParseFns[p.crntToken.Type]; exists {
-	// 	return prefixParseFn()
-	// }
+	for p.nextToken.Type != token.SEMICOLON && precedence < p.nextPrecedence() {
+		switch p.nextToken.Type {
+		case token.PLUS, token.MINUS, token.SLASH, token.ASTERISK, token.EQ, token.NOT_EQ, token.LT, token.GT:
+			p.advance()
+			expression = p.parseInfixExpression(expression)
+		default:
+			return expression
+		}
+	}
 
-	// return nil
+	return expression
 }
 
 func (p *Parser) parseIdentifier() ast.Expression {
@@ -53,6 +61,18 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 	}
 	p.advance()
 	expression.Right = p.parseExpression(PREFIX)
+	return expression
+}
+
+func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
+	expression := &ast.InfixExpression{
+		Left:     left,
+		Token:    p.crntToken,
+		Operator: p.crntToken.Type,
+	}
+	precedence := p.crntPrecedence()
+	p.advance()
+	expression.Right = p.parseExpression(precedence)
 	return expression
 }
 

@@ -203,6 +203,36 @@ func TestParsingPrefixExpressions(t *testing.T) {
 	})
 }
 
+func TestParseInfixOperators(t *testing.T) {
+	t.Run("5 + 5;", func(t *testing.T) {
+		input := `5 + 5;`
+
+		expect := &ast.Program{
+			Statements: []ast.Statement{
+				&ast.ExpressionStatement{
+					Token: token.New(token.INT, "5"),
+					Expression: &ast.InfixExpression{
+						Left: &ast.IntegerLiteral{
+							Token: token.New(token.INT, "5"),
+							Value: 5,
+						},
+						Token:    token.New(token.PLUS, "+"),
+						Operator: token.PLUS,
+						Right: &ast.IntegerLiteral{
+							Token: token.New(token.INT, "5"),
+							Value: 5,
+						},
+					},
+				},
+			},
+		}
+
+		p := New(lexer.New(input))
+
+		doTest(t, p, expect)
+	})
+}
+
 func doTest(t *testing.T, p *Parser, expect interface{}) {
 	actual := p.ParseProgram()
 
