@@ -48,3 +48,12 @@ func (e *InfixExpression) TokenLiteral() string { return e.Token.Literal }
 func (e *InfixExpression) String() string {
 	return fmt.Sprintf("(%v %v %v)", e.Left.String(), e.Operator, e.Right.String())
 }
+
+type BooleanExpression struct {
+	Token token.Token
+	Value bool
+}
+
+func (e *BooleanExpression) expressionNode()      {}
+func (e *BooleanExpression) TokenLiteral() string { return e.Token.Literal }
+func (e *BooleanExpression) String() string       { return e.Token.Literal }

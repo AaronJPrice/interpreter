@@ -17,6 +17,8 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 		expression = p.parseIdentifier()
 	case token.INT:
 		expression = p.parseIntegerLiteral()
+	case token.TRUE, token.FALSE:
+		expression = p.parseBoolean()
 	case token.BANG, token.MINUS:
 		expression = p.parsePrefixExpression()
 	default:
@@ -51,6 +53,13 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 	return &ast.IntegerExpression{
 		Token: p.crntToken,
 		Value: value,
+	}
+}
+
+func (p *Parser) parseBoolean() ast.Expression {
+	return &ast.BooleanExpression{
+		Token: p.crntToken,
+		Value: p.crntToken.Type == token.TRUE,
 	}
 }
 

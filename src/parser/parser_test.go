@@ -269,6 +269,48 @@ func TestParseInfixOperators(t *testing.T) {
 	})
 }
 
+func TestParseBoolean(t *testing.T) {
+	t.Run("true;", func(t *testing.T) {
+		input := "true;"
+
+		expect := &ast.Program{
+			Statements: []ast.Statement{
+				&ast.ExpressionStatement{
+					Token: token.New(token.TRUE, "true"),
+					Expression: &ast.BooleanExpression{
+						Token: token.New(token.TRUE, "true"),
+						Value: true,
+					},
+				},
+			},
+		}
+
+		p := New(lexer.New(input))
+
+		doTest(t, p, expect)
+	})
+
+	t.Run("false;", func(t *testing.T) {
+		input := "false;"
+
+		expect := &ast.Program{
+			Statements: []ast.Statement{
+				&ast.ExpressionStatement{
+					Token: token.New(token.FALSE, "false"),
+					Expression: &ast.BooleanExpression{
+						Token: token.New(token.FALSE, "false"),
+						Value: false,
+					},
+				},
+			},
+		}
+
+		p := New(lexer.New(input))
+
+		doTest(t, p, expect)
+	})
+}
+
 func doTest(t *testing.T, p *Parser, expect interface{}) {
 	actual := p.ParseProgram()
 
