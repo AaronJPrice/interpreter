@@ -66,17 +66,17 @@ type IfExpression struct {
 	Alternative *BlockStatement
 }
 
-func (ie *IfExpression) expressionNode()      {}
-func (ie *IfExpression) TokenLiteral() string { return ie.Token.Literal }
-func (ie *IfExpression) String() string {
+func (e *IfExpression) expressionNode()      {}
+func (e *IfExpression) TokenLiteral() string { return e.Token.Literal }
+func (e *IfExpression) String() string {
 	var out bytes.Buffer
 	out.WriteString("if")
-	out.WriteString(ie.Condition.String())
+	out.WriteString(e.Condition.String())
 	out.WriteString(" ")
-	out.WriteString(ie.Consequence.String())
-	if ie.Alternative != nil {
+	out.WriteString(e.Consequence.String())
+	if e.Alternative != nil {
 		out.WriteString("else ")
-		out.WriteString(ie.Alternative.String())
+		out.WriteString(e.Alternative.String())
 	}
 	return out.String()
 }
