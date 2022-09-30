@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"bytes"
 	"fmt"
 
 	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/token"
@@ -38,4 +39,19 @@ func (s *ExpressionStatement) statementNode()       {}
 func (s *ExpressionStatement) TokenLiteral() string { return s.Token.Literal }
 func (s *ExpressionStatement) String() string {
 	return s.Expression.String()
+}
+
+type BlockStatement struct {
+	Token      token.Token
+	Statements []Statement
+}
+
+func (bs *BlockStatement) statementNode()       {}
+func (bs *BlockStatement) TokenLiteral() string { return bs.Token.Literal }
+func (bs *BlockStatement) String() string {
+	var out bytes.Buffer
+	for _, s := range bs.Statements {
+		out.WriteString(s.String())
+	}
+	return out.String()
 }
