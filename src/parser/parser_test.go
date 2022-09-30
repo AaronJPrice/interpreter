@@ -231,6 +231,42 @@ func TestParseInfixOperators(t *testing.T) {
 
 		doTest(t, p, expect)
 	})
+
+	t.Run("3 + 2 * 1;", func(t *testing.T) {
+		input := `3 + 2 * 1;`
+
+		expect := &ast.Program{
+			Statements: []ast.Statement{
+				&ast.ExpressionStatement{
+					Token: token.New(token.INT, "3"),
+					Expression: &ast.InfixExpression{
+						Left: &ast.IntegerExpression{
+							Token: token.New(token.INT, "3"),
+							Value: 3,
+						},
+						Token:    token.New(token.PLUS, "+"),
+						Operator: token.PLUS,
+						Right: &ast.InfixExpression{
+							Left: &ast.IntegerExpression{
+								Token: token.New(token.INT, "2"),
+								Value: 2,
+							},
+							Token:    token.New(token.ASTERISK, "*"),
+							Operator: token.ASTERISK,
+							Right: &ast.IntegerExpression{
+								Token: token.New(token.INT, "1"),
+								Value: 1,
+							},
+						},
+					},
+				},
+			},
+		}
+
+		p := New(lexer.New(input))
+
+		doTest(t, p, expect)
+	})
 }
 
 func doTest(t *testing.T, p *Parser, expect interface{}) {
