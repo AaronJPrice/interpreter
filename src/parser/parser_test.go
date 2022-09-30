@@ -311,6 +311,65 @@ func TestParseBoolean(t *testing.T) {
 	})
 }
 
+func TestParentheses(t *testing.T) {
+
+	t.Run("1 + 2 + 3 + 4;", func(t *testing.T) {
+		input := `1 + 2 + 3 + 4;`
+
+		expect := &ast.Program{Statements: []ast.Statement{&ast.ExpressionStatement{
+			Token: token.New(token.INT, "1"),
+			Expression: &ast.InfixExpression{
+				Left: &ast.InfixExpression{
+					Left: &ast.InfixExpression{
+						Left:     &ast.IntegerExpression{Token: token.New(token.INT, "1"), Value: 1},
+						Token:    token.New(token.PLUS, "+"),
+						Operator: token.PLUS,
+						Right:    &ast.IntegerExpression{Token: token.New(token.INT, "2"), Value: 2},
+					},
+					Token:    token.New(token.PLUS, "+"),
+					Operator: token.PLUS,
+					Right:    &ast.IntegerExpression{Token: token.New(token.INT, "3"), Value: 3},
+				},
+				Token:    token.New(token.PLUS, "+"),
+				Operator: token.PLUS,
+				Right:    &ast.IntegerExpression{Token: token.New(token.INT, "4"), Value: 4},
+			},
+		}}}
+
+		p := New(lexer.New(input))
+
+		doTest(t, p, expect)
+	})
+
+	t.Run("1 + (2 + 3) + 4;", func(t *testing.T) {
+		input := `1 + (2 + 3) + 4;`
+
+		expect := &ast.Program{Statements: []ast.Statement{&ast.ExpressionStatement{
+			Token: token.New(token.INT, "1"),
+			Expression: &ast.InfixExpression{
+				Left: &ast.InfixExpression{
+					Left:     &ast.IntegerExpression{Token: token.New(token.INT, "1"), Value: 1},
+					Token:    token.New(token.PLUS, "+"),
+					Operator: token.PLUS,
+					Right: &ast.InfixExpression{
+						Left:     &ast.IntegerExpression{Token: token.New(token.INT, "2"), Value: 2},
+						Token:    token.New(token.PLUS, "+"),
+						Operator: token.PLUS,
+						Right:    &ast.IntegerExpression{Token: token.New(token.INT, "3"), Value: 3},
+					},
+				},
+				Token:    token.New(token.PLUS, "+"),
+				Operator: token.PLUS,
+				Right:    &ast.IntegerExpression{Token: token.New(token.INT, "4"), Value: 4},
+			},
+		}}}
+
+		p := New(lexer.New(input))
+
+		doTest(t, p, expect)
+	})
+}
+
 func doTest(t *testing.T, p *Parser, expect interface{}) {
 	actual := p.ParseProgram()
 
@@ -320,6 +379,7 @@ func doTest(t *testing.T, p *Parser, expect interface{}) {
 		}
 	} else {
 		if !assert.Equal(t, expect, actual) {
+			t.Log("expect:", expect)
 			t.Log("actual:", actual)
 		}
 	}

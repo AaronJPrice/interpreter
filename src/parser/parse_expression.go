@@ -21,6 +21,8 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 		expression = p.parseBoolean()
 	case token.BANG, token.MINUS:
 		expression = p.parsePrefixExpression()
+	case token.LPAREN:
+		expression = p.parseGroupedExpression()
 	default:
 		p.noPrefixParseFnError(p.crntToken.Type)
 		return nil
@@ -82,6 +84,15 @@ func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 	precedence := p.crntPrecedence()
 	p.advance()
 	expression.Right = p.parseExpression(precedence)
+	return expression
+}
+
+func (p *Parser) parseGroupedExpression() ast.Expression {
+	p.advance()
+	expression := p.parseExpression(LOWEST)
+	if !p.advanceIfNextIs(token.RPAREN) {
+		return nil
+	}
 	return expression
 }
 
