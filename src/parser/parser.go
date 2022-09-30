@@ -10,9 +10,14 @@ import (
 
 func New(l *lexer.Lexer) *Parser {
 	p := &Parser{l: l}
+
+	// p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
+	// p.registerPrefix(token.IDENT, p.parseIdentifier)
+
 	// Avance twice to set crntToken and nextToken
 	p.advance()
 	p.advance()
+
 	return p
 }
 
@@ -21,6 +26,8 @@ type Parser struct {
 	errors    []error
 	crntToken token.Token
 	nextToken token.Token
+	// prefixParseFns map[token.TokenType]prefixParseFn
+	// infixParseFns  map[token.TokenType]infixParseFn
 }
 
 func (p *Parser) Errors() []error {
@@ -45,50 +52,6 @@ func (p *Parser) advance() {
 	p.nextToken = p.l.NextToken()
 }
 
-func (p *Parser) parseStatement() ast.Statement {
-	switch p.crntToken.Type {
-	case token.LET:
-		return p.parseLetStatement()
-	case token.RETURN:
-		return p.parseReturnStatement()
-	default:
-		return nil
-	}
-}
-func (p *Parser) parseLetStatement() *ast.LetStatement {
-	s := &ast.LetStatement{Token: p.crntToken}
-
-	if !p.advanceIfNextIs(token.IDENT) {
-		return nil // could return an error here
-	}
-
-	s.Name = &ast.IdentifierExpression{Token: p.crntToken, Value: p.crntToken.Literal}
-
-	if !p.advanceIfNextIs(token.ASSIGN) {
-		return nil // could return an error here
-	}
-
-	// TODO: expressions
-	for p.crntToken.Type != token.SEMICOLON {
-		p.advance()
-	}
-
-	return s
-}
-
-func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
-	s := &ast.ReturnStatement{Token: p.crntToken}
-
-	p.advance()
-
-	// TODO: expressions
-	for p.crntToken.Type != token.SEMICOLON {
-		p.advance()
-	}
-
-	return s
-}
-
 func (p *Parser) advanceIfNextIs(t token.TokenType) bool {
 	if p.nextToken.Type == t {
 		p.advance()
@@ -103,3 +66,16 @@ func (p *Parser) addError(t token.TokenType) {
 	err := fmt.Errorf("expected next token to be %s, got %s", t, p.nextToken.Type)
 	p.errors = append(p.errors, err)
 }
+
+// func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
+// 	p.prefixParseFns[tokenType] = fn
+// }
+
+// func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFn) {
+// 	p.infixParseFns[tokenType] = fn
+// }
+
+// type (
+// 	prefixParseFn func() ast.Expression
+// 	infixParseFn  func(ast.Expression) ast.Expression
+// )

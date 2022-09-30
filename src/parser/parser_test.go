@@ -111,6 +111,26 @@ func TestReturnStatements(t *testing.T) {
 	})
 }
 
+func TestIdentifierExpression(t *testing.T) {
+	input := "foobar;"
+
+	expect := &ast.Program{
+		Statements: []ast.Statement{
+			&ast.ExpressionStatement{
+				Token: token.New(token.IDENT, "foobar"),
+				Expression: &ast.IdentifierExpression{
+					Token: token.New(token.IDENT, "foobar"),
+					Value: "foobar",
+				},
+			},
+		},
+	}
+
+	p := New(lexer.New(input))
+
+	doTest(t, p, expect)
+}
+
 func doTest(t *testing.T, p *Parser, expect interface{}) {
 	actual := p.ParseProgram()
 
