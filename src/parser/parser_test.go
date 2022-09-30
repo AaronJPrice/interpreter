@@ -138,7 +138,7 @@ func TestIntegerExpression(t *testing.T) {
 		Statements: []ast.Statement{
 			&ast.ExpressionStatement{
 				Token: token.New(token.INT, "5"),
-				Expression: &ast.IntegerLiteral{
+				Expression: &ast.IntegerExpression{
 					Token: token.New(token.INT, "5"),
 					Value: 5,
 				},
@@ -163,7 +163,7 @@ func TestParsingPrefixExpressions(t *testing.T) {
 					Expression: &ast.PrefixExpression{
 						Token:    token.New(token.BANG, "!"),
 						Operator: token.BANG,
-						Right: &ast.IntegerLiteral{
+						Right: &ast.IntegerExpression{
 							Token: token.New(token.INT, "5"),
 							Value: 5,
 						},
@@ -188,7 +188,7 @@ func TestParsingPrefixExpressions(t *testing.T) {
 					Expression: &ast.PrefixExpression{
 						Token:    token.New(token.MINUS, "-"),
 						Operator: token.MINUS,
-						Right: &ast.IntegerLiteral{
+						Right: &ast.IntegerExpression{
 							Token: token.New(token.INT, "15"),
 							Value: 15,
 						},
@@ -212,13 +212,13 @@ func TestParseInfixOperators(t *testing.T) {
 				&ast.ExpressionStatement{
 					Token: token.New(token.INT, "5"),
 					Expression: &ast.InfixExpression{
-						Left: &ast.IntegerLiteral{
+						Left: &ast.IntegerExpression{
 							Token: token.New(token.INT, "5"),
 							Value: 5,
 						},
 						Token:    token.New(token.PLUS, "+"),
 						Operator: token.PLUS,
-						Right: &ast.IntegerLiteral{
+						Right: &ast.IntegerExpression{
 							Token: token.New(token.INT, "5"),
 							Value: 5,
 						},

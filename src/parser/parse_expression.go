@@ -48,7 +48,7 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 		return nil
 	}
 
-	return &ast.IntegerLiteral{
+	return &ast.IntegerExpression{
 		Token: p.crntToken,
 		Value: value,
 	}
