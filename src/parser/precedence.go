@@ -13,17 +13,6 @@ const (
 	CALL        // myFunction(X)
 )
 
-var precedences = map[token.TokenType]int{
-	token.EQ:       EQUALS,
-	token.NOT_EQ:   EQUALS,
-	token.LT:       LESSGREATER,
-	token.GT:       LESSGREATER,
-	token.PLUS:     SUM,
-	token.MINUS:    SUM,
-	token.SLASH:    PRODUCT,
-	token.ASTERISK: PRODUCT,
-}
-
 func (p *Parser) nextPrecedence() int {
 	return p.getPrecedence(p.nextToken)
 }
@@ -33,8 +22,16 @@ func (p *Parser) crntPrecedence() int {
 }
 
 func (p *Parser) getPrecedence(t token.Token) int {
-	if p, ok := precedences[t.Type]; ok {
-		return p
+	switch t.Type {
+	case token.EQ, token.NOT_EQ:
+		return EQUALS
+	case token.LT, token.GT:
+		return LESSGREATER
+	case token.PLUS, token.MINUS:
+		return SUM
+	case token.SLASH, token.ASTERISK:
+		return PRODUCT
+	default:
+		return LOWEST
 	}
-	return LOWEST
 }
