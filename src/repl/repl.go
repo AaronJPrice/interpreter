@@ -41,7 +41,15 @@ func Parser(in io.Reader, out io.Writer) {
 
 		l := lexer.New(scanner.Text())
 		p := parser.New(l)
+
 		program := p.ParseProgram()
-		fmt.Printf("%+v\n", program)
+
+		if errs := p.Errors(); errs != nil {
+			for _, err := range errs {
+				fmt.Printf("ERROR %+v\n", err)
+			}
+		} else {
+			fmt.Printf("%+v\n", program)
+		}
 	}
 }
