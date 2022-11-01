@@ -55,7 +55,7 @@ func Parser(in io.Reader, out io.Writer) {
 	}
 }
 
-func Evaluater(in io.Reader, out io.Writer) {
+func Evaluator(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
 
 	for {
