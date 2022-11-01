@@ -16,14 +16,14 @@ func (p *Parser) parseStatement() ast.Statement {
 	}
 }
 
-func (p *Parser) parseLetStatement() *ast.LetStatement {
-	s := &ast.LetStatement{Token: p.crntToken}
+func (p *Parser) parseLetStatement() *ast.StatementLet {
+	s := &ast.StatementLet{Token: p.crntToken}
 
 	if !p.advanceIfNextIs(token.IDENT) {
 		return nil // could return an error here
 	}
 
-	s.Name = &ast.IdentifierExpression{Token: p.crntToken, Value: p.crntToken.Literal}
+	s.Name = &ast.ExpressionIdentifier{Token: p.crntToken, Value: p.crntToken.Literal}
 
 	if !p.advanceIfNextIs(token.ASSIGN) {
 		return nil // could return an error here
@@ -37,8 +37,8 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	return s
 }
 
-func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
-	s := &ast.ReturnStatement{Token: p.crntToken}
+func (p *Parser) parseReturnStatement() *ast.StatementReturn {
+	s := &ast.StatementReturn{Token: p.crntToken}
 
 	p.advance()
 
@@ -50,8 +50,8 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	return s
 }
 
-func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
-	s := &ast.ExpressionStatement{Token: p.crntToken}
+func (p *Parser) parseExpressionStatement() *ast.StatementExpression {
+	s := &ast.StatementExpression{Token: p.crntToken}
 	// parseExpression advances crntToken, so it must be called _after_ setting the Token field in
 	// ExpressionStatement (i.e. it can't be called inline as part of the struct literal) since
 	// otherwise the value of Token will be wrong

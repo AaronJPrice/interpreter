@@ -7,68 +7,68 @@ import (
 	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/token"
 )
 
-type IdentifierExpression struct {
+type ExpressionIdentifier struct {
 	Token token.Token
 	Value string
 }
 
-func (e *IdentifierExpression) expressionNode()      {}
-func (e *IdentifierExpression) TokenLiteral() string { return e.Token.Literal }
-func (e *IdentifierExpression) String() string       { return e.Value }
+func (e *ExpressionIdentifier) expressionNode()      {}
+func (e *ExpressionIdentifier) TokenLiteral() string { return e.Token.Literal }
+func (e *ExpressionIdentifier) String() string       { return e.Value }
 
-type IntegerExpression struct {
+type ExpressionInteger struct {
 	Token token.Token
 	Value int64
 }
 
-func (il *IntegerExpression) expressionNode()      {}
-func (il *IntegerExpression) TokenLiteral() string { return il.Token.Literal }
-func (il *IntegerExpression) String() string       { return il.Token.Literal }
+func (il *ExpressionInteger) expressionNode()      {}
+func (il *ExpressionInteger) TokenLiteral() string { return il.Token.Literal }
+func (il *ExpressionInteger) String() string       { return il.Token.Literal }
 
-type PrefixExpression struct {
+type ExpressionPrefix struct {
 	Token    token.Token
 	Operator token.TokenType
 	Right    Expression
 }
 
-func (e *PrefixExpression) expressionNode()      {}
-func (e *PrefixExpression) TokenLiteral() string { return e.Token.Literal }
-func (e *PrefixExpression) String() string {
+func (e *ExpressionPrefix) expressionNode()      {}
+func (e *ExpressionPrefix) TokenLiteral() string { return e.Token.Literal }
+func (e *ExpressionPrefix) String() string {
 	return fmt.Sprintf("(%v%v)", e.Operator, e.Right.String())
 }
 
-type InfixExpression struct {
+type ExpressionInfix struct {
 	Token    token.Token
 	Left     Expression
 	Operator token.TokenType
 	Right    Expression
 }
 
-func (e *InfixExpression) expressionNode()      {}
-func (e *InfixExpression) TokenLiteral() string { return e.Token.Literal }
-func (e *InfixExpression) String() string {
+func (e *ExpressionInfix) expressionNode()      {}
+func (e *ExpressionInfix) TokenLiteral() string { return e.Token.Literal }
+func (e *ExpressionInfix) String() string {
 	return fmt.Sprintf("(%v %v %v)", e.Left.String(), e.Operator, e.Right.String())
 }
 
-type BooleanExpression struct {
+type ExpressionBoolean struct {
 	Token token.Token
 	Value bool
 }
 
-func (e *BooleanExpression) expressionNode()      {}
-func (e *BooleanExpression) TokenLiteral() string { return e.Token.Literal }
-func (e *BooleanExpression) String() string       { return e.Token.Literal }
+func (e *ExpressionBoolean) expressionNode()      {}
+func (e *ExpressionBoolean) TokenLiteral() string { return e.Token.Literal }
+func (e *ExpressionBoolean) String() string       { return e.Token.Literal }
 
-type IfExpression struct {
+type ExpressionIf struct {
 	Token       token.Token // The 'if' token
 	Condition   Expression
-	Consequence *BlockStatement
-	Alternative *BlockStatement
+	Consequence *StatementBlock
+	Alternative *StatementBlock
 }
 
-func (e *IfExpression) expressionNode()      {}
-func (e *IfExpression) TokenLiteral() string { return e.Token.Literal }
-func (e *IfExpression) String() string {
+func (e *ExpressionIf) expressionNode()      {}
+func (e *ExpressionIf) TokenLiteral() string { return e.Token.Literal }
+func (e *ExpressionIf) String() string {
 	var out bytes.Buffer
 	out.WriteString("if")
 	out.WriteString(e.Condition.String())

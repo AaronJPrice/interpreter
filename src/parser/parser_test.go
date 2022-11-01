@@ -16,9 +16,9 @@ func TestLetStatements(t *testing.T) {
 
 		expect := &ast.Program{
 			Statements: []ast.Statement{
-				&ast.LetStatement{
+				&ast.StatementLet{
 					Token: token.New(token.LET, "let"),
-					Name:  &ast.IdentifierExpression{Token: token.New(token.IDENT, "x"), Value: "x"},
+					Name:  &ast.ExpressionIdentifier{Token: token.New(token.IDENT, "x"), Value: "x"},
 					Value: nil, // TODO
 				},
 			},
@@ -34,9 +34,9 @@ func TestLetStatements(t *testing.T) {
 
 		expect := &ast.Program{
 			Statements: []ast.Statement{
-				&ast.LetStatement{
+				&ast.StatementLet{
 					Token: token.New(token.LET, "let"),
-					Name:  &ast.IdentifierExpression{Token: token.New(token.IDENT, "y"), Value: "y"},
+					Name:  &ast.ExpressionIdentifier{Token: token.New(token.IDENT, "y"), Value: "y"},
 					Value: nil, // TODO
 				},
 			},
@@ -52,9 +52,9 @@ func TestLetStatements(t *testing.T) {
 
 		expect := &ast.Program{
 			Statements: []ast.Statement{
-				&ast.LetStatement{
+				&ast.StatementLet{
 					Token: token.New(token.LET, "let"),
-					Name:  &ast.IdentifierExpression{Token: token.New(token.IDENT, "foobar"), Value: "foobar"},
+					Name:  &ast.ExpressionIdentifier{Token: token.New(token.IDENT, "foobar"), Value: "foobar"},
 					Value: nil, // TODO
 				},
 			},
@@ -90,15 +90,15 @@ func TestReturnStatements(t *testing.T) {
 
 		expect := &ast.Program{
 			Statements: []ast.Statement{
-				&ast.ReturnStatement{
+				&ast.StatementReturn{
 					Token:       token.New(token.RETURN, "return"),
 					ReturnValue: nil, // TODO
 				},
-				&ast.ReturnStatement{
+				&ast.StatementReturn{
 					Token:       token.New(token.RETURN, "return"),
 					ReturnValue: nil, // TODO
 				},
-				&ast.ReturnStatement{
+				&ast.StatementReturn{
 					Token:       token.New(token.RETURN, "return"),
 					ReturnValue: nil, // TODO
 				},
@@ -116,9 +116,9 @@ func TestIdentifierExpression(t *testing.T) {
 
 	expect := &ast.Program{
 		Statements: []ast.Statement{
-			&ast.ExpressionStatement{
+			&ast.StatementExpression{
 				Token: token.New(token.IDENT, "foobar"),
-				Expression: &ast.IdentifierExpression{
+				Expression: &ast.ExpressionIdentifier{
 					Token: token.New(token.IDENT, "foobar"),
 					Value: "foobar",
 				},
@@ -136,9 +136,9 @@ func TestIntegerExpression(t *testing.T) {
 
 	expect := &ast.Program{
 		Statements: []ast.Statement{
-			&ast.ExpressionStatement{
+			&ast.StatementExpression{
 				Token: token.New(token.INT, "5"),
-				Expression: &ast.IntegerExpression{
+				Expression: &ast.ExpressionInteger{
 					Token: token.New(token.INT, "5"),
 					Value: 5,
 				},
@@ -158,12 +158,12 @@ func TestParsingPrefixExpressions(t *testing.T) {
 
 		expect := &ast.Program{
 			Statements: []ast.Statement{
-				&ast.ExpressionStatement{
+				&ast.StatementExpression{
 					Token: token.New(token.BANG, "!"),
-					Expression: &ast.PrefixExpression{
+					Expression: &ast.ExpressionPrefix{
 						Token:    token.New(token.BANG, "!"),
 						Operator: token.BANG,
-						Right: &ast.IntegerExpression{
+						Right: &ast.ExpressionInteger{
 							Token: token.New(token.INT, "5"),
 							Value: 5,
 						},
@@ -183,12 +183,12 @@ func TestParsingPrefixExpressions(t *testing.T) {
 
 		expect := &ast.Program{
 			Statements: []ast.Statement{
-				&ast.ExpressionStatement{
+				&ast.StatementExpression{
 					Token: token.New(token.MINUS, "-"),
-					Expression: &ast.PrefixExpression{
+					Expression: &ast.ExpressionPrefix{
 						Token:    token.New(token.MINUS, "-"),
 						Operator: token.MINUS,
-						Right: &ast.IntegerExpression{
+						Right: &ast.ExpressionInteger{
 							Token: token.New(token.INT, "15"),
 							Value: 15,
 						},
@@ -209,16 +209,16 @@ func TestParseInfixOperators(t *testing.T) {
 
 		expect := &ast.Program{
 			Statements: []ast.Statement{
-				&ast.ExpressionStatement{
+				&ast.StatementExpression{
 					Token: token.New(token.INT, "5"),
-					Expression: &ast.InfixExpression{
-						Left: &ast.IntegerExpression{
+					Expression: &ast.ExpressionInfix{
+						Left: &ast.ExpressionInteger{
 							Token: token.New(token.INT, "5"),
 							Value: 5,
 						},
 						Token:    token.New(token.PLUS, "+"),
 						Operator: token.PLUS,
-						Right: &ast.IntegerExpression{
+						Right: &ast.ExpressionInteger{
 							Token: token.New(token.INT, "5"),
 							Value: 5,
 						},
@@ -237,23 +237,23 @@ func TestParseInfixOperators(t *testing.T) {
 
 		expect := &ast.Program{
 			Statements: []ast.Statement{
-				&ast.ExpressionStatement{
+				&ast.StatementExpression{
 					Token: token.New(token.INT, "3"),
-					Expression: &ast.InfixExpression{
-						Left: &ast.IntegerExpression{
+					Expression: &ast.ExpressionInfix{
+						Left: &ast.ExpressionInteger{
 							Token: token.New(token.INT, "3"),
 							Value: 3,
 						},
 						Token:    token.New(token.PLUS, "+"),
 						Operator: token.PLUS,
-						Right: &ast.InfixExpression{
-							Left: &ast.IntegerExpression{
+						Right: &ast.ExpressionInfix{
+							Left: &ast.ExpressionInteger{
 								Token: token.New(token.INT, "2"),
 								Value: 2,
 							},
 							Token:    token.New(token.ASTERISK, "*"),
 							Operator: token.ASTERISK,
-							Right: &ast.IntegerExpression{
+							Right: &ast.ExpressionInteger{
 								Token: token.New(token.INT, "1"),
 								Value: 1,
 							},
@@ -275,9 +275,9 @@ func TestParseBoolean(t *testing.T) {
 
 		expect := &ast.Program{
 			Statements: []ast.Statement{
-				&ast.ExpressionStatement{
+				&ast.StatementExpression{
 					Token: token.New(token.TRUE, "true"),
-					Expression: &ast.BooleanExpression{
+					Expression: &ast.ExpressionBoolean{
 						Token: token.New(token.TRUE, "true"),
 						Value: true,
 					},
@@ -295,9 +295,9 @@ func TestParseBoolean(t *testing.T) {
 
 		expect := &ast.Program{
 			Statements: []ast.Statement{
-				&ast.ExpressionStatement{
+				&ast.StatementExpression{
 					Token: token.New(token.FALSE, "false"),
-					Expression: &ast.BooleanExpression{
+					Expression: &ast.ExpressionBoolean{
 						Token: token.New(token.FALSE, "false"),
 						Value: false,
 					},
@@ -316,23 +316,23 @@ func TestParentheses(t *testing.T) {
 	t.Run("1 + 2 + 3 + 4;", func(t *testing.T) {
 		input := `1 + 2 + 3 + 4;`
 
-		expect := &ast.Program{Statements: []ast.Statement{&ast.ExpressionStatement{
+		expect := &ast.Program{Statements: []ast.Statement{&ast.StatementExpression{
 			Token: token.New(token.INT, "1"),
-			Expression: &ast.InfixExpression{
-				Left: &ast.InfixExpression{
-					Left: &ast.InfixExpression{
-						Left:     &ast.IntegerExpression{Token: token.New(token.INT, "1"), Value: 1},
+			Expression: &ast.ExpressionInfix{
+				Left: &ast.ExpressionInfix{
+					Left: &ast.ExpressionInfix{
+						Left:     &ast.ExpressionInteger{Token: token.New(token.INT, "1"), Value: 1},
 						Token:    token.New(token.PLUS, "+"),
 						Operator: token.PLUS,
-						Right:    &ast.IntegerExpression{Token: token.New(token.INT, "2"), Value: 2},
+						Right:    &ast.ExpressionInteger{Token: token.New(token.INT, "2"), Value: 2},
 					},
 					Token:    token.New(token.PLUS, "+"),
 					Operator: token.PLUS,
-					Right:    &ast.IntegerExpression{Token: token.New(token.INT, "3"), Value: 3},
+					Right:    &ast.ExpressionInteger{Token: token.New(token.INT, "3"), Value: 3},
 				},
 				Token:    token.New(token.PLUS, "+"),
 				Operator: token.PLUS,
-				Right:    &ast.IntegerExpression{Token: token.New(token.INT, "4"), Value: 4},
+				Right:    &ast.ExpressionInteger{Token: token.New(token.INT, "4"), Value: 4},
 			},
 		}}}
 
@@ -344,23 +344,23 @@ func TestParentheses(t *testing.T) {
 	t.Run("1 + (2 + 3) + 4;", func(t *testing.T) {
 		input := `1 + (2 + 3) + 4;`
 
-		expect := &ast.Program{Statements: []ast.Statement{&ast.ExpressionStatement{
+		expect := &ast.Program{Statements: []ast.Statement{&ast.StatementExpression{
 			Token: token.New(token.INT, "1"),
-			Expression: &ast.InfixExpression{
-				Left: &ast.InfixExpression{
-					Left:     &ast.IntegerExpression{Token: token.New(token.INT, "1"), Value: 1},
+			Expression: &ast.ExpressionInfix{
+				Left: &ast.ExpressionInfix{
+					Left:     &ast.ExpressionInteger{Token: token.New(token.INT, "1"), Value: 1},
 					Token:    token.New(token.PLUS, "+"),
 					Operator: token.PLUS,
-					Right: &ast.InfixExpression{
-						Left:     &ast.IntegerExpression{Token: token.New(token.INT, "2"), Value: 2},
+					Right: &ast.ExpressionInfix{
+						Left:     &ast.ExpressionInteger{Token: token.New(token.INT, "2"), Value: 2},
 						Token:    token.New(token.PLUS, "+"),
 						Operator: token.PLUS,
-						Right:    &ast.IntegerExpression{Token: token.New(token.INT, "3"), Value: 3},
+						Right:    &ast.ExpressionInteger{Token: token.New(token.INT, "3"), Value: 3},
 					},
 				},
 				Token:    token.New(token.PLUS, "+"),
 				Operator: token.PLUS,
-				Right:    &ast.IntegerExpression{Token: token.New(token.INT, "4"), Value: 4},
+				Right:    &ast.ExpressionInteger{Token: token.New(token.INT, "4"), Value: 4},
 			},
 		}}}
 

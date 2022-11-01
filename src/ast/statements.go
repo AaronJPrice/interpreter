@@ -7,48 +7,48 @@ import (
 	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/token"
 )
 
-type LetStatement struct {
+type StatementLet struct {
 	Token token.Token // the token.LET token
-	Name  *IdentifierExpression
+	Name  *ExpressionIdentifier
 	Value Expression
 }
 
-func (s *LetStatement) statementNode()       {}
-func (s *LetStatement) TokenLiteral() string { return s.Token.Literal }
-func (s *LetStatement) String() string {
+func (s *StatementLet) statementNode()       {}
+func (s *StatementLet) TokenLiteral() string { return s.Token.Literal }
+func (s *StatementLet) String() string {
 	return fmt.Sprintf("%v %v = %v;", s.TokenLiteral(), s.Name.String(), s.Value.String())
 }
 
-type ReturnStatement struct {
+type StatementReturn struct {
 	Token       token.Token // the 'return' token
 	ReturnValue Expression
 }
 
-func (s *ReturnStatement) statementNode()       {}
-func (s *ReturnStatement) TokenLiteral() string { return s.Token.Literal }
-func (s *ReturnStatement) String() string {
+func (s *StatementReturn) statementNode()       {}
+func (s *StatementReturn) TokenLiteral() string { return s.Token.Literal }
+func (s *StatementReturn) String() string {
 	return fmt.Sprintf("%v %v", s.TokenLiteral(), s.ReturnValue)
 }
 
-type ExpressionStatement struct {
+type StatementExpression struct {
 	Token      token.Token // the first token of the expression
 	Expression Expression
 }
 
-func (s *ExpressionStatement) statementNode()       {}
-func (s *ExpressionStatement) TokenLiteral() string { return s.Token.Literal }
-func (s *ExpressionStatement) String() string {
+func (s *StatementExpression) statementNode()       {}
+func (s *StatementExpression) TokenLiteral() string { return s.Token.Literal }
+func (s *StatementExpression) String() string {
 	return s.Expression.String()
 }
 
-type BlockStatement struct {
+type StatementBlock struct {
 	Token      token.Token
 	Statements []Statement
 }
 
-func (s *BlockStatement) statementNode()       {}
-func (s *BlockStatement) TokenLiteral() string { return s.Token.Literal }
-func (s *BlockStatement) String() string {
+func (s *StatementBlock) statementNode()       {}
+func (s *StatementBlock) TokenLiteral() string { return s.Token.Literal }
+func (s *StatementBlock) String() string {
 	var out bytes.Buffer
 	for _, s := range s.Statements {
 		out.WriteString(s.String())

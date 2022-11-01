@@ -11,13 +11,13 @@ import (
 func TestString(t *testing.T) {
 	p := &Program{
 		Statements: []Statement{
-			&LetStatement{
+			&StatementLet{
 				Token: token.New(token.LET, "let"),
-				Name: &IdentifierExpression{
+				Name: &ExpressionIdentifier{
 					Token: token.New(token.IDENT, "myVar"),
 					Value: "myVar",
 				},
-				Value: &IdentifierExpression{
+				Value: &ExpressionIdentifier{
 					Token: token.New(token.IDENT, "anotherVar"),
 					Value: "anotherVar",
 				},

@@ -42,7 +42,7 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 }
 
 func (p *Parser) parseIdentifier() ast.Expression {
-	return &ast.IdentifierExpression{Token: p.crntToken, Value: p.crntToken.Literal}
+	return &ast.ExpressionIdentifier{Token: p.crntToken, Value: p.crntToken.Literal}
 }
 
 func (p *Parser) parseIntegerLiteral() ast.Expression {
@@ -52,21 +52,21 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 		return nil
 	}
 
-	return &ast.IntegerExpression{
+	return &ast.ExpressionInteger{
 		Token: p.crntToken,
 		Value: value,
 	}
 }
 
 func (p *Parser) parseBoolean() ast.Expression {
-	return &ast.BooleanExpression{
+	return &ast.ExpressionBoolean{
 		Token: p.crntToken,
 		Value: p.crntToken.Type == token.TRUE,
 	}
 }
 
 func (p *Parser) parsePrefixExpression() ast.Expression {
-	expression := &ast.PrefixExpression{
+	expression := &ast.ExpressionPrefix{
 		Token:    p.crntToken,
 		Operator: p.crntToken.Type,
 	}
@@ -76,7 +76,7 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 }
 
 func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
-	expression := &ast.InfixExpression{
+	expression := &ast.ExpressionInfix{
 		Left:     left,
 		Token:    p.crntToken,
 		Operator: p.crntToken.Type,
