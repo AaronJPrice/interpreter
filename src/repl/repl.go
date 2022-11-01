@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 
+	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/eval"
 	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/lexer"
 	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/parser"
 )
@@ -51,5 +52,31 @@ func Parser(in io.Reader, out io.Writer) {
 		} else {
 			fmt.Printf("%+v\n", program)
 		}
+	}
+}
+
+func Evaluater(in io.Reader, out io.Writer) {
+	scanner := bufio.NewScanner(in)
+
+	for {
+		fmt.Printf(PROMPT)
+
+		if !scanner.Scan() {
+			return
+		}
+
+		l := lexer.New(scanner.Text())
+
+		p := parser.New(l)
+		program := p.ParseProgram()
+		if errs := p.Errors(); errs != nil {
+			for _, err := range errs {
+				fmt.Printf("ERROR %+v\n", err)
+			}
+			continue
+		}
+
+		object := eval.Evaluate(program)
+		fmt.Println(object)
 	}
 }
