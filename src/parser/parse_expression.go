@@ -23,6 +23,8 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 		expression = p.parsePrefixExpression()
 	case token.LPAREN:
 		expression = p.parseGroupedExpression()
+	case token.IF:
+		expression = p.parseIfExpression()
 	default:
 		p.noPrefixParseFnError(p.crntToken.Type)
 		return nil
@@ -93,6 +95,36 @@ func (p *Parser) parseGroupedExpression() ast.Expression {
 	if !p.advanceIfNextIs(token.RPAREN) {
 		return nil
 	}
+	return expression
+}
+
+func (p *Parser) parseIfExpression() ast.Expression {
+	expression := &ast.ExpressionIf{Token: p.crntToken}
+
+	if !p.advanceIfNextIs(token.LPAREN) {
+		return nil
+	}
+	p.advance()
+
+	expression.Condition = p.parseExpression(LOWEST)
+
+	if !p.advanceIfNextIs(token.RPAREN) {
+		return nil
+	}
+	if !p.advanceIfNextIs(token.LBRACE) {
+		return nil
+	}
+
+	expression.Consequence = p.parseBlockStatement()
+
+	if p.nextToken.Type == token.ELSE {
+		p.advance()
+		if !p.advanceIfNextIs(token.LBRACE) {
+			return nil
+		}
+		expression.Alternative = p.parseBlockStatement()
+	}
+
 	return expression
 }
 

@@ -370,6 +370,69 @@ func TestParentheses(t *testing.T) {
 	})
 }
 
+func TestIf(t *testing.T) {
+	t.Run(`if (x < y) { x; };`, func(t *testing.T) {
+		input := `if (x < y) { x; };`
+
+		expect := &ast.Program{Statements: []ast.Statement{&ast.StatementExpression{
+			Token: token.New(token.IF, "if"),
+			Expression: &ast.ExpressionIf{
+				Token: token.New(token.IF, "if"),
+				Condition: &ast.ExpressionInfix{
+					Token:    token.New(token.LT, "<"),
+					Left:     &ast.ExpressionIdentifier{Token: token.New(token.IDENT, "x"), Value: "x"},
+					Operator: token.LT,
+					Right:    &ast.ExpressionIdentifier{Token: token.New(token.IDENT, "y"), Value: "y"},
+				},
+				Consequence: &ast.StatementBlock{
+					Token: token.New(token.LBRACE, "{"),
+					Statements: []ast.Statement{&ast.StatementExpression{
+						Token:      token.New(token.IDENT, "x"),
+						Expression: &ast.ExpressionIdentifier{Token: token.New(token.IDENT, "x"), Value: "x"},
+					}},
+				},
+			},
+		}}}
+
+		p := New(lexer.New(input))
+		doTest(t, p, expect)
+	})
+
+	t.Run(`if (x < y) { x; } else { y; };`, func(t *testing.T) {
+		input := `if (x < y) { x; } else { y; };`
+
+		expect := &ast.Program{Statements: []ast.Statement{&ast.StatementExpression{
+			Token: token.New(token.IF, "if"),
+			Expression: &ast.ExpressionIf{
+				Token: token.New(token.IF, "if"),
+				Condition: &ast.ExpressionInfix{
+					Token:    token.New(token.LT, "<"),
+					Left:     &ast.ExpressionIdentifier{Token: token.New(token.IDENT, "x"), Value: "x"},
+					Operator: token.LT,
+					Right:    &ast.ExpressionIdentifier{Token: token.New(token.IDENT, "y"), Value: "y"},
+				},
+				Consequence: &ast.StatementBlock{
+					Token: token.New(token.LBRACE, "{"),
+					Statements: []ast.Statement{&ast.StatementExpression{
+						Token:      token.New(token.IDENT, "x"),
+						Expression: &ast.ExpressionIdentifier{Token: token.New(token.IDENT, "x"), Value: "x"},
+					}},
+				},
+				Alternative: &ast.StatementBlock{
+					Token: token.New(token.LBRACE, "{"),
+					Statements: []ast.Statement{&ast.StatementExpression{
+						Token:      token.New(token.IDENT, "y"),
+						Expression: &ast.ExpressionIdentifier{Token: token.New(token.IDENT, "y"), Value: "y"},
+					}},
+				},
+			},
+		}}}
+
+		p := New(lexer.New(input))
+		doTest(t, p, expect)
+	})
+}
+
 func doTest(t *testing.T, p *Parser, expect interface{}) {
 	actual := p.ParseProgram()
 
