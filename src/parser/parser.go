@@ -45,11 +45,13 @@ func (p *Parser) ParseProgram() *ast.Program {
 	return program
 }
 
+// nextToken
 func (p *Parser) advance() {
 	p.crntToken = p.nextToken
 	p.nextToken = p.l.NextToken()
 }
 
+// expectPeek
 func (p *Parser) advanceIfNextIs(t token.TokenType) bool {
 	if p.nextToken.Type == t {
 		p.advance()
