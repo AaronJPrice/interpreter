@@ -21,11 +21,7 @@ func TestInteger(t *testing.T) {
 		{`10`, &object.Integer{Value: 10}},
 	}
 	for i, tc := range testCases {
-		l := lexer.New(tc.source)
-		p := parser.New(l)
-		program := p.ParseProgram()
-		actual := Evaluate(program)
-		assert.Equal(t, tc.expect, actual, fmt.Sprintf("test case [%v]", i))
+		doTest(t, i, tc)
 	}
 }
 
