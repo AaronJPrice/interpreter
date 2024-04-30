@@ -69,6 +69,11 @@ func evalPrefixExpression(operator token.TokenType, right object.Object) object.
 		default:
 			return FALSE
 		}
+	case token.MINUS:
+		if intObj, ok := right.(*object.Integer); ok {
+			return &object.Integer{Value: -intObj.Value}
+		}
+		return NULL
 	default:
 		return NULL
 	}

@@ -21,6 +21,8 @@ func TestBang(t *testing.T) {
 		{`!true`, FALSE},
 		{`!!false`, FALSE},
 		{`!!true`, TRUE},
+		{`!5`, FALSE},
+		{`!!5`, TRUE},
 	}
 	for i, tc := range testCases {
 		doTest(t, i, tc)
@@ -41,6 +43,8 @@ func TestInteger(t *testing.T) {
 	testCases := []testCase{
 		{`5`, &object.Integer{Value: 5}},
 		{`10`, &object.Integer{Value: 10}},
+		{`-5`, &object.Integer{Value: -5}},
+		{`--5`, &object.Integer{Value: 5}},
 	}
 	for i, tc := range testCases {
 		doTest(t, i, tc)
