@@ -5,9 +5,19 @@ import (
 
 	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/ast"
 	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/eval/object"
+	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/parser"
 )
 
-func Evaluate(untypedNode ast.Node) object.Object {
+func Evaluate(source string) (object.Object, []error) {
+	program, errs := parser.Parse(source)
+	if errs != nil {
+		return nil, errs
+	}
+
+	return evaluateNode(program), nil
+}
+
+func evaluateNode(untypedNode ast.Node) object.Object {
 	switch node := untypedNode.(type) {
 
 	// Statements
@@ -15,7 +25,7 @@ func Evaluate(untypedNode ast.Node) object.Object {
 		return evaluateStatements(node.Statements)
 
 	case *ast.StatementExpression:
-		return Evaluate(node.Expression)
+		return evaluateNode(node.Expression)
 
 	// Expressions
 	case *ast.ExpressionBoolean:
@@ -37,7 +47,7 @@ func Evaluate(untypedNode ast.Node) object.Object {
 func evaluateStatements(statements []ast.Statement) object.Object {
 	var result object.Object
 	for _, statement := range statements {
-		result = Evaluate(statement)
+		result = evaluateNode(statement)
 	}
 	return result
 }

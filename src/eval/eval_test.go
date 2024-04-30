@@ -40,6 +40,6 @@ func doTest(t *testing.T, i int, tc testCase) {
 	l := lexer.New(tc.source)
 	p := parser.New(l)
 	program := p.ParseProgram()
-	actual := Evaluate(program)
+	actual := evaluateNode(program)
 	assert.Equal(t, tc.expect, actual, fmt.Sprintf("test case [%v]", i))
 }

@@ -61,15 +61,13 @@ func Evaluator(in io.Reader, out io.Writer) {
 			return
 		}
 
-		program, errs := parser.Parse(scanner.Text())
+		object, errs := eval.Evaluate(scanner.Text())
 		if errs != nil {
 			for _, err := range errs {
 				fmt.Printf("ERROR %+v\n", err)
 			}
 			continue
 		}
-
-		object := eval.Evaluate(program)
 		fmt.Println(object)
 	}
 }
