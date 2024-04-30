@@ -1,5 +1,6 @@
 package token
 
+// Map token literal to TokenType
 func LookupWord(word string) TokenType {
 	switch word {
 	case "fn":

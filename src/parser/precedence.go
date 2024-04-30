@@ -1,6 +1,6 @@
 package parser
 
-import "bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/token"
+import "bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/token"
 
 const (
 	_ int = iota

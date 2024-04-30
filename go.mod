@@ -1,4 +1,4 @@
-module bitbucket.org/hurricanecommerce/dev-day-2022-09-28
+module bitbucket.org/hurricanecommerce/dev-days/2024-05-09
 
 go 1.18
 

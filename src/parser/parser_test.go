@@ -4,9 +4,9 @@ import (
 	"errors"
 	"testing"
 
-	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/ast"
-	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/lexer"
-	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/token"
+	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/ast"
+	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/lexer"
+	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/token"
 	"github.com/stretchr/testify/assert"
 )
 

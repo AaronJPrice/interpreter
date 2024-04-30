@@ -1,5 +1,6 @@
 package token
 
+// COnvenience function for tests
 func New(tokenType TokenType, literal string) Token {
 	return Token{Type: tokenType, Literal: literal}
 }
