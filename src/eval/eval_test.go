@@ -28,8 +28,8 @@ func TestInteger(t *testing.T) {
 func TestBoolean(t *testing.T) {
 	testCases := []testCase{
 		// {``, &object.Null{}},
-		{`false`, &object.Boolean{Value: false}},
-		{`true`, &object.Boolean{Value: true}},
+		{`false`, FALSE},
+		{`true`, TRUE},
 	}
 	for i, tc := range testCases {
 		doTest(t, i, tc)
