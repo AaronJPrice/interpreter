@@ -6,6 +6,7 @@ import (
 	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/ast"
 	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/eval/object"
 	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/parser"
+	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/token"
 )
 
 func Evaluate(source string) (object.Object, []error) {
@@ -14,18 +15,18 @@ func Evaluate(source string) (object.Object, []error) {
 		return nil, errs
 	}
 
-	return evaluateNode(program), nil
+	return evalNode(program), nil
 }
 
-func evaluateNode(untypedNode ast.Node) object.Object {
+func evalNode(untypedNode ast.Node) object.Object {
 	switch node := untypedNode.(type) {
 
 	// Statements
 	case *ast.Program:
-		return evaluateStatements(node.Statements)
+		return evalStatements(node.Statements)
 
 	case *ast.StatementExpression:
-		return evaluateNode(node.Expression)
+		return evalNode(node.Expression)
 
 	// Expressions
 	case *ast.ExpressionBoolean:
@@ -38,16 +39,37 @@ func evaluateNode(untypedNode ast.Node) object.Object {
 	case *ast.ExpressionInteger:
 		return &object.Integer{Value: node.Value}
 
+	case *ast.ExpressionPrefix:
+		return evalPrefixExpression(node.Operator, evalNode(node.Right))
+
 	default:
 		panic(fmt.Sprintf("unexpected case: node has type %T", node))
 
 	}
 }
 
-func evaluateStatements(statements []ast.Statement) object.Object {
+func evalStatements(statements []ast.Statement) object.Object {
 	var result object.Object
 	for _, statement := range statements {
-		result = evaluateNode(statement)
+		result = evalNode(statement)
 	}
 	return result
+}
+
+func evalPrefixExpression(operator token.TokenType, right object.Object) object.Object {
+	switch operator {
+	case token.BANG:
+		switch right {
+		case TRUE:
+			return FALSE
+		case FALSE:
+			return TRUE
+		case NULL:
+			return TRUE
+		default:
+			return FALSE
+		}
+	default:
+		return NULL
+	}
 }
