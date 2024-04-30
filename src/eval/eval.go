@@ -19,7 +19,11 @@ func Evaluate(untypedNode ast.Node) object.Object {
 
 	// Expressions
 	case *ast.ExpressionBoolean:
-		return &object.Boolean{Value: node.Value}
+		if node.Value {
+			return TRUE
+		} else {
+			return FALSE
+		}
 
 	case *ast.ExpressionInteger:
 		return &object.Integer{Value: node.Value}
