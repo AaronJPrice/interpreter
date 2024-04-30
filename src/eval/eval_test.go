@@ -51,6 +51,25 @@ func TestInteger(t *testing.T) {
 	}
 }
 
+func TestInfixOperators(t *testing.T) {
+	testCases := []testCase{
+		{"5 + 5 + 5 + 5 - 10", &object.Integer{Value: 10}},
+		{"2 * 2 * 2 * 2 * 2", &object.Integer{Value: 32}},
+		{"-50 + 100 + -50", &object.Integer{Value: 0}},
+		{"5 * 2 + 10", &object.Integer{Value: 20}},
+		{"5 + 2 * 10", &object.Integer{Value: 25}},
+		{"20 + 2 * -10", &object.Integer{Value: 0}},
+		{"50 / 2 * 2 + 10", &object.Integer{Value: 60}},
+		{"2 * (5 + 10)", &object.Integer{Value: 30}},
+		{"3 * 3 * 3 + 10", &object.Integer{Value: 37}},
+		{"3 * (3 * 3) + 10", &object.Integer{Value: 37}},
+		{"(5 + 10 * 2 + 15 / 3) * 2 + -10", &object.Integer{Value: 50}},
+	}
+	for i, tc := range testCases {
+		doTest(t, i, tc)
+	}
+}
+
 func doTest(t *testing.T, i int, tc testCase) {
 	l := lexer.New(tc.source)
 	p := parser.New(l)
