@@ -15,11 +15,8 @@ type testCase struct {
 	expect object.Object
 }
 
-func TestA(t *testing.T) {
+func TestInteger(t *testing.T) {
 	testCases := []testCase{
-		// {``, &object.Null{}},
-		{`false`, &object.Boolean{Value: false}},
-		{`true`, &object.Boolean{Value: true}},
 		{`5`, &object.Integer{Value: 5}},
 		{`10`, &object.Integer{Value: 10}},
 	}
@@ -30,5 +27,23 @@ func TestA(t *testing.T) {
 		actual := Evaluate(program)
 		assert.Equal(t, tc.expect, actual, fmt.Sprintf("test case [%v]", i))
 	}
+}
 
+func TestBoolean(t *testing.T) {
+	testCases := []testCase{
+		// {``, &object.Null{}},
+		{`false`, &object.Boolean{Value: false}},
+		{`true`, &object.Boolean{Value: true}},
+	}
+	for i, tc := range testCases {
+		doTest(t, i, tc)
+	}
+}
+
+func doTest(t *testing.T, i int, tc testCase) {
+	l := lexer.New(tc.source)
+	p := parser.New(l)
+	program := p.ParseProgram()
+	actual := Evaluate(program)
+	assert.Equal(t, tc.expect, actual, fmt.Sprintf("test case [%v]", i))
 }
