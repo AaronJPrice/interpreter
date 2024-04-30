@@ -3,8 +3,8 @@ package eval
 import (
 	"fmt"
 
-	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/ast"
-	"bitbucket.org/hurricanecommerce/dev-day-2022-09-28/src/object"
+	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/ast"
+	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/object"
 )
 
 func Evaluate(untypedNode ast.Node) object.Object {
