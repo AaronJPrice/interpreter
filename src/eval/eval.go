@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/ast"
-	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/object"
+	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/eval/object"
 )
 
 func Evaluate(untypedNode ast.Node) object.Object {
@@ -17,7 +17,7 @@ func Evaluate(untypedNode ast.Node) object.Object {
 	case *ast.StatementExpression:
 		return Evaluate(node.Expression)
 
-		// Expressions
+	// Expressions
 	case *ast.ExpressionBoolean:
 		return &object.Boolean{Value: node.Value}
 

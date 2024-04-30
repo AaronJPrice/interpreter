@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
+	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/eval/object"
 	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/lexer"
-	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/object"
 	"bitbucket.org/hurricanecommerce/dev-days/2024-05-09/src/parser"
 	"github.com/stretchr/testify/assert"
 )
