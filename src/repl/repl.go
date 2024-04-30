@@ -45,9 +45,9 @@ func Parser(in io.Reader, out io.Writer) {
 			for _, err := range errs {
 				fmt.Printf("ERROR %+v\n", err)
 			}
-		} else {
-			fmt.Printf("%+v\n", program)
+			continue
 		}
+		fmt.Printf("%+v\n", program)
 	}
 }
 
@@ -61,11 +61,8 @@ func Evaluator(in io.Reader, out io.Writer) {
 			return
 		}
 
-		l := lexer.New(scanner.Text())
-
-		p := parser.New(l)
-		program := p.ParseProgram()
-		if errs := p.Errors(); errs != nil {
+		program, errs := parser.Parse(scanner.Text())
+		if errs != nil {
 			for _, err := range errs {
 				fmt.Printf("ERROR %+v\n", err)
 			}
