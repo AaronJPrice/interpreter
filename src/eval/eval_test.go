@@ -51,7 +51,7 @@ func TestInteger(t *testing.T) {
 	}
 }
 
-func TestInfixOperators(t *testing.T) {
+func TestArithmeticInfixOperators(t *testing.T) {
 	testCases := []testCase{
 		{"5 + 5 + 5 + 5 - 10", &object.Integer{Value: 10}},
 		{"2 * 2 * 2 * 2 * 2", &object.Integer{Value: 32}},
@@ -64,6 +64,21 @@ func TestInfixOperators(t *testing.T) {
 		{"3 * 3 * 3 + 10", &object.Integer{Value: 37}},
 		{"3 * (3 * 3) + 10", &object.Integer{Value: 37}},
 		{"(5 + 10 * 2 + 15 / 3) * 2 + -10", &object.Integer{Value: 50}},
+	}
+	for i, tc := range testCases {
+		doTest(t, i, tc)
+	}
+}
+func TestBooleanInfixOperators(t *testing.T) {
+	testCases := []testCase{
+		{"1 < 2", TRUE},
+		{"1 > 2", FALSE},
+		{"1 < 1", FALSE},
+		{"1 > 1", FALSE},
+		// {"1 == 1", TRUE},
+		// {"1 != 1", FALSE},
+		// {"1 == 2", FALSE},
+		// {"1 != 2", TRUE},
 	}
 	for i, tc := range testCases {
 		doTest(t, i, tc)
