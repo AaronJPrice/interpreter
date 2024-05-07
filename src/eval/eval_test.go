@@ -94,6 +94,21 @@ func TestBooleanInfixOperators(t *testing.T) {
 	}
 }
 
+func TestIfElseExpressions(t *testing.T) {
+	testCases := []testCase{
+		{"if (true) { 10 }", &object.Integer{Value: 10}},
+		{"if (false) { 10 }", NULL},
+		{"if (1) { 10 }", NULL},
+		{"if (1 < 2) { 10 }", &object.Integer{Value: 10}},
+		{"if (1 > 2) { 10 }", NULL},
+		{"if (1 > 2) { 10 } else { 20 }", &object.Integer{Value: 20}},
+		{"if (1 < 2) { 10 } else { 20 }", &object.Integer{Value: 10}},
+	}
+	for i, tc := range testCases {
+		doTest(t, i, tc)
+	}
+}
+
 func doTest(t *testing.T, i int, tc testCase) {
 	l := lexer.New(tc.source)
 	p := parser.New(l)

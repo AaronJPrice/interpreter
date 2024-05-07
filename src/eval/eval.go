@@ -15,6 +15,8 @@ func evalNode(untypedNode ast.Node) object.Object {
 		return evalStatements(node.Statements)
 	case *ast.StatementExpression:
 		return evalNode(node.Expression)
+	case *ast.StatementBlock:
+		return evalStatements(node.Statements)
 	// Expressions
 	case *ast.ExpressionBoolean:
 		return nativeBoolToBooleanObject(node.Value)
@@ -24,6 +26,8 @@ func evalNode(untypedNode ast.Node) object.Object {
 		return evalPrefixExpression(node.Operator, evalNode(node.Right))
 	case *ast.ExpressionInfix:
 		return evalInfixExpression(node.Operator, evalNode(node.Left), evalNode(node.Right))
+	case *ast.ExpressionIf:
+		return evalIfExpression(node)
 	default:
 		panic(fmt.Sprintf("unexpected case: node has type %T", node))
 	}
@@ -100,6 +104,17 @@ func evalBooleanInfixExpression(operator token.TokenType, left, right *object.Bo
 	case token.NOT_EQ:
 		return nativeBoolToBooleanObject(left != right)
 	default:
+		return NULL
+	}
+}
+
+func evalIfExpression(ie *ast.ExpressionIf) object.Object {
+	condition := evalNode(ie.Condition)
+	if b, isBoolean := condition.(*object.Boolean); isBoolean && b.Value {
+		return evalNode(ie.Consequence)
+	} else if ie.Alternative != nil {
+		return evalNode(ie.Alternative)
+	} else {
 		return NULL
 	}
 }
