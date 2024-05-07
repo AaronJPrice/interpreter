@@ -11,8 +11,8 @@ type ObjectType string
 
 const (
 	NULL_OBJ    ObjectType = "NULL"
-	BOOLEAN_OBJ            = "BOOLEAN"
-	INTEGER_OBJ            = "INTEGER"
+	BOOLEAN_OBJ ObjectType = "BOOLEAN"
+	INTEGER_OBJ ObjectType = "INTEGER"
 )
 
 type Null struct{}
