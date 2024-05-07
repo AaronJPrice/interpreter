@@ -13,10 +13,10 @@ func evalNode(untypedNode ast.Node) object.Object {
 	// Statements
 	case *ast.Program:
 		return evalStatements(node.Statements)
-	case *ast.StatementExpression:
-		return evalNode(node.Expression)
 	case *ast.StatementBlock:
 		return evalStatements(node.Statements)
+	case *ast.StatementExpression:
+		return evalNode(node.Expression)
 	// Expressions
 	case *ast.ExpressionBoolean:
 		return nativeBoolToBooleanObject(node.Value)
