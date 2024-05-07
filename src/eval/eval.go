@@ -84,10 +84,10 @@ func evalIntegerInfixExpression(operator token.TokenType, left, right *object.In
 		return nativeBoolToBooleanObject(left.Value < right.Value)
 	case token.GT:
 		return nativeBoolToBooleanObject(left.Value > right.Value)
-	// case token.EQ:
-	// 	return nativeBoolToBooleanObject(left.Value == right.Value)
-	// case token.NOT_EQ:
-	// 	return nativeBoolToBooleanObject(left.Value != right.Value)
+	case token.EQ:
+		return nativeBoolToBooleanObject(left.Value == right.Value)
+	case token.NOT_EQ:
+		return nativeBoolToBooleanObject(left.Value != right.Value)
 	default:
 		return NULL
 	}
