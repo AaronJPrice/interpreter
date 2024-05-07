@@ -79,6 +79,15 @@ func TestBooleanInfixOperators(t *testing.T) {
 		{"1 != 1", FALSE},
 		{"1 == 2", FALSE},
 		{"1 != 2", TRUE},
+		{"true == true", TRUE},
+		{"false == false", TRUE},
+		{"true == false", FALSE},
+		{"true != false", TRUE},
+		{"false != true", TRUE},
+		{"(1 < 2) == true", TRUE},
+		{"(1 < 2) == false", FALSE},
+		{"(1 > 2) == true", FALSE},
+		{"(1 > 2) == false", TRUE},
 	}
 	for i, tc := range testCases {
 		doTest(t, i, tc)
