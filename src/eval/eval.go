@@ -17,11 +17,7 @@ func evalNode(untypedNode ast.Node) object.Object {
 		return evalNode(node.Expression)
 	// Expressions
 	case *ast.ExpressionBoolean:
-		if node.Value {
-			return TRUE
-		} else {
-			return FALSE
-		}
+		return nativeBoolToBooleanObject(node.Value)
 	case *ast.ExpressionInteger:
 		return &object.Integer{Value: node.Value}
 	case *ast.ExpressionPrefix:
@@ -67,20 +63,22 @@ func evalPrefixExpression(operator token.TokenType, right object.Object) object.
 func evalInfixExpression(operator token.TokenType, left, right object.Object) object.Object {
 	switch {
 	case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
-		leftVal := left.(*object.Integer).Value
-		rightVal := right.(*object.Integer).Value
-		switch operator {
-		case token.PLUS:
-			return &object.Integer{Value: leftVal + rightVal}
-		case token.MINUS:
-			return &object.Integer{Value: leftVal - rightVal}
-		case token.ASTERISK:
-			return &object.Integer{Value: leftVal * rightVal}
-		case token.SLASH:
-			return &object.Integer{Value: leftVal / rightVal}
-		default:
-			return NULL
-		}
+		return evalIntegerInfixExpression(operator, left.(*object.Integer), right.(*object.Integer))
+	default:
+		return NULL
+	}
+}
+
+func evalIntegerInfixExpression(operator token.TokenType, left, right *object.Integer) object.Object {
+	switch operator {
+	case token.PLUS:
+		return &object.Integer{Value: left.Value + right.Value}
+	case token.MINUS:
+		return &object.Integer{Value: left.Value - right.Value}
+	case token.ASTERISK:
+		return &object.Integer{Value: left.Value * right.Value}
+	case token.SLASH:
+		return &object.Integer{Value: left.Value / right.Value}
 	default:
 		return NULL
 	}
