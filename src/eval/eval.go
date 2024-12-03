@@ -17,6 +17,9 @@ func evalNode(untypedNode ast.Node) object.Object {
 		return evalStatements(node.Statements)
 	case *ast.StatementExpression:
 		return evalNode(node.Expression)
+	case *ast.StatementReturn:
+		fmt.Println("Hello", node.ReturnValue)
+		return &object.ReturnValue{Value: evalNode(node.ReturnValue)}
 	// Expressions
 	case *ast.ExpressionBoolean:
 		return nativeBoolToBooleanObject(node.Value)
@@ -37,6 +40,9 @@ func evalStatements(statements []ast.Statement) object.Object {
 	var result object.Object
 	for _, statement := range statements {
 		result = evalNode(statement)
+		if returnValue, ok := result.(*object.ReturnValue); ok {
+			return returnValue.Value
+		}
 	}
 	return result
 }

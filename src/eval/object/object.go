@@ -10,9 +10,10 @@ type Object interface {
 type ObjectType string
 
 const (
-	NULL_OBJ    ObjectType = "NULL"
-	BOOLEAN_OBJ ObjectType = "BOOLEAN"
-	INTEGER_OBJ ObjectType = "INTEGER"
+	NULL_OBJ         ObjectType = "NULL"
+	BOOLEAN_OBJ      ObjectType = "BOOLEAN"
+	INTEGER_OBJ      ObjectType = "INTEGER"
+	RETURN_VALUE_OBJ ObjectType = "RETURN_VALUE"
 )
 
 type Null struct{}
@@ -33,3 +34,11 @@ type Integer struct {
 
 func (i *Integer) Type() ObjectType { return INTEGER_OBJ }
 func (i *Integer) Inspect() string  { return fmt.Sprintf("%d", i.Value) }
+
+// This is a special object that we use to indicate to break out of the loop when evaluating statements
+type ReturnValue struct {
+	Value Object
+}
+
+func (rv *ReturnValue) Type() ObjectType { return RETURN_VALUE_OBJ }
+func (rv *ReturnValue) Inspect() string  { return rv.Value.Inspect() }

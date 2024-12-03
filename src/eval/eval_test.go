@@ -109,6 +109,19 @@ func TestIfElseExpressions(t *testing.T) {
 	}
 }
 
+func TestResturnStatement(t *testing.T) {
+	testCases := []testCase{
+		{"return 10;", &object.Integer{Value: 10}},
+		// {"return 10; 9;", &object.Integer{Value: 10}},
+		// {"return 2 * 5; 9;", &object.Integer{Value: 10}},
+		// {"9; return 2 * 5; 9;", &object.Integer{Value: 10}},
+		// {"if (10 > 1) { if (10 > 1) { return 10; } return 1; }", &object.Integer{Value: 10}},
+	}
+	for i, tc := range testCases {
+		doTest(t, i, tc)
+	}
+}
+
 func doTest(t *testing.T, i int, tc testCase) {
 	l := lexer.New(tc.source)
 	p := parser.New(l)
